@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
 
-export const ContainerStartVoting = styled.div`
+export const ContainerVote = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    margin-top: 2.5rem;
+    margin-top: 1.5rem;
 `
