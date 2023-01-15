@@ -1,6 +1,7 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { ItemQuote, QuoteListData } from "../../components/ItemQuote";
-import { Quote } from "../../components/Quote";
+import { Quote, QuoteProps } from "../../components/Quote";
 import { Vote } from "../../components/Vote";
 import { Welcome } from "../../components/Welcome";
 import { ContainerHome } from "./styles";
@@ -11,27 +12,43 @@ export function Home() {
     const [isQuoteOpen, setIsQuoteOpen] = useState(false)
     const [quoteList, setQuoteList] = useState<QuoteListData[]>([])
     const [quoteRate, setQuoteRate] = useState('')
+    const [newQuote, setNewQuote] = useState<QuoteProps>({})
 
     function handleVoteQuote(){
-        const newQuote: QuoteListData = {
-            quoteOwner: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi animi minus.",
-            quoteRate: quoteRate,
-            quoteTextContent: "Lorem, Lorem"
+        const newItemQuotList: QuoteListData = {
+            quoteOwner: newQuote.character!,
+            quoteTextContent: newQuote.quote!,
+            rate: quoteRate
         }
 
-        setQuoteList((state) => [...state, newQuote])
+        setQuoteList((state) => [...state, newItemQuotList])
         setQuoteRate('')
     }
 
+    async function getApi(){
+        const res = await axios.get('https://animechan.vercel.app/api/random')
+
+        const newQuote: QuoteProps = {
+            anime: res.data.anime,
+            character: res.data.character,            
+            quote: res.data.quote
+        }
+
+        setNewQuote(newQuote)
+    }
+
     useEffect(() => {
-        const orderQuoteList = quoteList.sort(function(a, b): number | boolean{
-            if(a.quoteRate > b.quoteRate){
+        getApi()
+        const orderQuoteList = quoteList.sort(function(a, b): any{
+            if(a.rate < b.rate){
                 return -1
             }
             else{
                 return true
             }
         })
+
+        console.log(orderQuoteList)
 
         setQuoteList(orderQuoteList)
     }, [quoteList])
@@ -41,7 +58,12 @@ export function Home() {
             <Welcome onClick={() => setIsQuoteOpen(!isQuoteOpen)} />
 
             {isQuoteOpen && (
-                <Quote />
+                <Quote 
+                    anime={newQuote.anime}
+                    character={newQuote.character}
+                    key={newQuote.anime + newQuote.character! + newQuote.quote}
+                    quote={newQuote.quote}
+                />
             )}
 
             <Vote 
@@ -54,7 +76,7 @@ export function Home() {
                 return(
                     <ItemQuote
                         quoteOwner={item.quoteOwner}
-                        quoteRate={item.quoteRate}
+                        rate={item.rate}
                         quoteTextContent={item.quoteTextContent}
                         key={item.quoteOwner + item.quoteTextContent}
                     />

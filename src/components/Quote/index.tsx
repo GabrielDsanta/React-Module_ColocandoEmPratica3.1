@@ -1,12 +1,18 @@
 import { ContainerQuote } from "./styles";
 
+export interface QuoteProps {
+    anime?: string
+    character?: string
+    quote?: string
+}
 
-export function Quote(){
+
+export function Quote({ anime, character, quote }: QuoteProps){
     return(
         <ContainerQuote>
-            <h3>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi animi minus.</h3>
+            <h3>{quote}</h3>
 
-            <h4>Lorem, Lorem</h4>
+            <h4>{character}, {anime}</h4>
         </ContainerQuote>
     )
 }
