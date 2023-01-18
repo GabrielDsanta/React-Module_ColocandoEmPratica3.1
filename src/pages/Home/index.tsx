@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { ItemQuote, QuoteListData } from "../../components/ItemQuote";
+import { LoginExample } from "../../components/LoginExample";
 import { Quote, QuoteProps } from "../../components/Quote";
 import { Vote } from "../../components/Vote";
 import { Welcome } from "../../components/Welcome";
@@ -48,13 +49,12 @@ export function Home() {
             }
         })
 
-        console.log(orderQuoteList)
-
         setQuoteList(orderQuoteList)
     }, [quoteList])
 
     return (
         <ContainerHome>
+            <LoginExample />
             <Welcome onClick={() => setIsQuoteOpen(!isQuoteOpen)} />
 
             {isQuoteOpen && (
